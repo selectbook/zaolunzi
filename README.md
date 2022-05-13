@@ -3,7 +3,11 @@ Reinventing the wheel (造轮子)
 
 **[[Submit tutorial](https://github.com/selectbook/zaolunzi/issues/new)]**
 
-# ![zaolunzi](https://lingshou-1305893078.cos.ap-guangzhou.myqcloud.com/%E9%80%A0%E8%BD%AE%E5%AD%90.png)
+“What I cannot create, I do not understand.”
+
+― Richard P. Feynman
+
+# ![zaolunzi]()
 
 ## Table of contents
 
