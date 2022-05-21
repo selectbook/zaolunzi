@@ -13,6 +13,10 @@ Reinventing the wheel (造轮子)
 
 ## Tutorials
 
+#### Build your own `Back-end Framework / Library`
+
+* [**Java**: _Tiny Java Web Framework_](https://github.com/selectbook/zaolunzi/tree/main/maque)
+
 #### Build your own `Front-end Framework / Library`
 
 * [**JavaScript**: _WTF is JSX (Let's Build a JSX Renderer)_](https://jasonformat.com/wtf-is-jsx/)
