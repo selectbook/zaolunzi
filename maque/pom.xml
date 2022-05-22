@@ -10,6 +10,9 @@
   <modules>
     <module>framework</module>
     <module>web</module>
+    <module>framework-rest</module>
+      <module>framework-security</module>
+      <module>framework-soap</module>
   </modules>
   <packaging>pom</packaging>
 
@@ -51,15 +54,6 @@
         <version>2.18.1</version>
         <configuration>
           <skipTests>true</skipTests>
-        </configuration>
-      </plugin>
-      <!-- Tomcat -->
-      <plugin>
-        <groupId>org.apache.tomcat.maven</groupId>
-        <artifactId>tomcat7-maven-plugin</artifactId>
-        <version>2.2</version>
-        <configuration>
-          <path>/${project.artifactId}</path>
         </configuration>
       </plugin>
     </plugins>
