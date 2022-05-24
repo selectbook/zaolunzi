@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:FeigeClient="http://www.zaolunzi.cn/schema/feige-reference"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.zaolunzi.cn/schema/feige-reference http://www.zaolunzi.cn/schema/feige-reference.xsd">
+
+
+    <!-- 引入远程服务 -->
+    <FeigeClient:reference id="remoteHelloService"
+                          interface="cn.zaolunzi.feige.test.HelloService"
+                          clusterStrategy="WeightRandom"
+                          remoteAppKey="ares"
+                          groupName="default"
+                          timeout="3000"/>
+
+
+</beans>
