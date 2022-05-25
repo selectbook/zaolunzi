@@ -1,2 +1,2 @@
-http\://www.zaolunzi.cn/schema/ares-service=cn.zaolunzi.feige.spring.FeigeRemoteServiceNamespaceHandler
-http\://www.zaolunzi.cn/schema/ares-reference=cn.zaolunzi.feige.spring.FeigeRemoteReferenceNamespaceHandler
+http\://www.zaolunzi.cn/schema/feige-service=cn.zaolunzi.feige.spring.FeigeRemoteServiceNamespaceHandler
+http\://www.zaolunzi.cn/schema/feige-reference=cn.zaolunzi.feige.spring.FeigeRemoteReferenceNamespaceHandler
