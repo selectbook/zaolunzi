@@ -12,45 +12,64 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.List;
 
+/**
+ *
+ * @Author: SelectBook
+ * @Date: 2022/5/30 00:36
+ */
 class SensorReader extends Source {
-    private final BufferedReader reader;
+    private static final long serialVersionUID = 7153550920021993542L;
     
-    public SensorReader(String name, int port) {
-        super(name);
+    private int instance = 0;
+    private final int portBase;
+    
+    private Socket socket;
+    private BufferedReader reader;
+    
+    public SensorReader(String name, int parallelism, int port) {
+        super(name, parallelism);
         
-        reader = setupSocketReader(port);
+        this.portBase = port;
     }
     
-    /**
-     * 流系统的生命周期钩子，用于执行用户定义的逻辑
-     * @param eventCollector 对外发送的事件收集器
-     */
+    @Override
+    public void setupInstance(int instance) {
+        this.instance = instance;
+        
+        setupSocketReader(portBase + instance);
+    }
+    
     @Override
     public void getEvents(List<Event> eventCollector) {
         try {
-            // 从输入中读取一种车辆类型。
-            String vehicle = reader.readLine(); 
+            String vehicle = reader.readLine();
             if (vehicle == null) {
-                // 当用户关闭服务器时退出。
+                // Exit when user closes the server.
                 System.exit(0);
             }
-            // 将字符串发射到收集器中。
             eventCollector.add(new VehicleEvent(vehicle));
-            System.out.println("");  // 记录新事件之前的空行
-            System.out.println("SensorReader --> " + vehicle);
+            System.out.println("");  // An empty line before logging new events
+            System.out.println("SensorReader :: instance " + instance + " --> " + vehicle);
         } catch (IOException e) {
             System.out.println("Failed to read input: " + e);
         }
     }
     
-    private BufferedReader setupSocketReader(int port) {
+    /**
+     * Set up a socket based reader object that reads strings from the port.
+     * @param port
+     */
+    private void setupSocketReader(int port) {
         try {
-            Socket socket = new Socket("47.106.94.179", port); InputStream input = socket.getInputStream();
-            return new BufferedReader(new InputStreamReader(input));
+            socket = new Socket("47.106.94.179", port);
+            InputStream input = socket.getInputStream();
+            reader = new BufferedReader(new InputStreamReader(input));
         } catch (UnknownHostException e) {
-            e.printStackTrace(); System.exit(0);
+            e.printStackTrace();
+            System.exit(0);
         } catch (IOException e) {
-            e.printStackTrace(); System.exit(0);
-        } return null;
+            e.printStackTrace();
+            System.exit(0);
+        }
     }
 }

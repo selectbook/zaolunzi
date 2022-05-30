@@ -86,6 +86,47 @@ Queue 队列在所有流系统中大量使用
 Job.addSource()允许您向作业添加数据源。
 Stream.applyOperator()允许您将运算符添加到流中。
 
+## 并行化和数据分组
+
+我们将学习一种基本技术来解决大多数分布式系统中的基本挑战。这一挑战是扩展流系统以增加作业的吞吐量，或者换句话说，处理更多数据。
+
+数据并行表示同一任务同时在不同的事件集上执行。
+任务并行表示不同的任务同时执行。
+
+数据并行被广泛用于分布式系统中以实现水平扩展。 在这些系统中，通过添加更多计算机来增加并行化会相对容易。 
+相反，对于任务并行性，通常需要人工干预将现有流程分解为多个步骤以提高并行性。
+流系统是数据并行和任务并行的组合。 在流式系统中，数据并行是指为每个组件创建多个实例，
+任务并行是指将整个过程分解为不同的组件来解决问题。 在上一章中，我们应用了任务并行技术并将整个系统分成两个组件。
+在本章中，我们将学习如何应用数据并行技术并为每个组件创建多个实例。
+
+我们引入一个 eventDispatcher（事件调度器）的新组件。它将允许我们将数据路由到并行化组件的不同实例。
+
+事件调度器将帮助我们在下游实例之间分配负载。
+
+您唯一需要做的就是在调用applyOperator()函数时添加一个额外的参数，diting 引擎会为您处理其余的。
+请记住，流式框架可以帮助您专注于业务逻辑，而不必担心引擎是如何实现的。
+不同的引擎可能有不同的方式来应用字段分组。通常，您可能会在不同引擎的名称groupBy()或名称中找到该函数。{operation}ByKey()
+
+错误日志
+
+``
+Exception in thread "main" org.apache.commons.lang3.SerializationException: IOException while reading or closing cloned object data
+at org.apache.commons.lang3.SerializationUtils.clone(SerializationUtils.java:98)
+at cn.zaolunzi.diting.engine.SourceExecutor.<init>(SourceExecutor.java:18)
+at cn.zaolunzi.diting.engine.JobStarter.setupComponentExecutors(JobStarter.java:53)
+at cn.zaolunzi.diting.engine.JobStarter.start(JobStarter.java:35)
+at cn.zaolunzi.diting.job.ParallelizedVehicleCountJob1.main(ParallelizedVehicleCountJob1.java:22)
+Caused by: java.io.InvalidClassException: cn.zaolunzi.diting.job.SensorReader; no valid constructor
+at java.base/java.io.ObjectStreamClass$ExceptionInfo.newInvalidClassException(ObjectStreamClass.java:170)
+at java.base/java.io.ObjectStreamClass.checkDeserialize(ObjectStreamClass.java:917)
+at java.base/java.io.ObjectInputStream.readOrdinaryObject(ObjectInputStream.java:2203)
+at java.base/java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1712)
+at java.base/java.io.ObjectInputStream.readObject(ObjectInputStream.java:519)
+at java.base/java.io.ObjectInputStream.readObject(ObjectInputStream.java:477)
+at org.apache.commons.lang3.SerializationUtils.clone(SerializationUtils.java:92)
+``
 
 
-
+这个错误是由于基类没有被序列化
+序列化任何子类后，读取数据时它的基类构造函数被触发。
+将Serializable的实现添加到父类

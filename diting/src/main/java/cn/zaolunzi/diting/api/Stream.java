@@ -1,5 +1,6 @@
 package cn.zaolunzi.diting.api;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +13,8 @@ import java.util.Set;
  *   job.addSource(mySource)
  *      .applyOperator(myOperator);
  */
-public class Stream {
+public class Stream implements Serializable {
+  private static final long serialVersionUID = 1066535753363064940L;
   // 要应用于此流的所有操作器的列表。
   private final Set<Operator> operatorSet = new HashSet<Operator>();
 
