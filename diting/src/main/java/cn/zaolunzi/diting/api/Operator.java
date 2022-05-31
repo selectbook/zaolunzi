@@ -1,7 +1,6 @@
 package cn.zaolunzi.diting.api;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * 所有用户自定义操作器（Operator） 的基础类.
@@ -35,10 +34,10 @@ public abstract class Operator extends Component implements Serializable {
    * @param event 传入事件
    * @param eventCollector 传出事件收集器
    */
-  public abstract void apply(Event event, List<Event> eventCollector);
+  public abstract void apply(Event event, EventCollector eventCollector);
   
   /**
-   * Get the grouping key of an event.
+   * 获取事件的分组键。
    * @return The grouping strategy of this operator
    */
   public GroupingStrategy getGroupingStrategy() {

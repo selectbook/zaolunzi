@@ -4,6 +4,8 @@ import cn.zaolunzi.diting.api.Event;
 import cn.zaolunzi.diting.api.GroupingStrategy;
 
 /**
+ * 将数据路由到并行化组件的不同实例
+ * 
  * @Author: SelectBook
  * @Date: 2022/5/30 8:39
  */

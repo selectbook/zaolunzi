@@ -2,11 +2,7 @@ package cn.zaolunzi.diting.api;
 
 import java.io.Serializable;
 
-public class FieldsGrouping implements GroupingStrategy, Serializable {
-  private static final long serialVersionUID = -1121182295793347601L;
-
-  public FieldsGrouping() {
-  }
+public interface FieldsGrouping extends GroupingStrategy, Serializable {
 
   /**
    * 从事件中获取密钥。 子类可以覆盖这个函数
@@ -14,9 +10,7 @@ public class FieldsGrouping implements GroupingStrategy, Serializable {
    * @param event 要从中提取密钥的事件对象。
    * @return 要散列的数据。
    */
-  protected Object getKey(Event event) {
-    return event.getData();
-  }
+  Object getKey(Event event);
 
   /**
    * 从事件和组件并行获取目标实例 ID
@@ -25,7 +19,7 @@ public class FieldsGrouping implements GroupingStrategy, Serializable {
    * @return 此事件的整数键。
    */
   @Override
-  public int getInstance(Event event, int parallelism) {
+  public default int getInstance(Event event, int parallelism) {
     return Math.abs(getKey(event).hashCode()) % parallelism;
   }
 }

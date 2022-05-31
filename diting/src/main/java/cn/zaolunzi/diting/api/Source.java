@@ -1,7 +1,6 @@
 package cn.zaolunzi.diting.api;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * 基础 数据源 source类，以供用户自定义
@@ -25,5 +24,5 @@ public abstract class Source extends Component implements Serializable {
      *
      * @param eventCollector 对外发送的事件收集器
      */
-    public abstract void getEvents(List<Event> eventCollector);
+    public abstract void getEvents(EventCollector eventCollector);
 }
