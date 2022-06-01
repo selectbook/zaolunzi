@@ -47,10 +47,20 @@ public class Stream implements Serializable {
     return operator.getOutgoingStream();
   }
   
+  protected Stream applyWindowOperator(WindowingStrategy strategy, WindowOperator operator) {
+    WindowingOperator windowingOperator = new WindowingOperator(
+            operator.getName(), operator.getParallelism(), strategy, operator, operator.getGroupingStrategy());
+    applyOperator(windowingOperator);
+    return operator.getOutgoingStream();
+  }
+  
   public StreamChannel selectChannel(String channel) {
     return new StreamChannel(this, channel);
   }
   
+  public WindowedStream withWindowing(WindowingStrategy strategy) {
+    return new WindowedStream(this, strategy);
+  }
   /**
    * Get the channels in the stream. Note that the channel set
    * is collected from the downstream component's applyOperator() calls.
