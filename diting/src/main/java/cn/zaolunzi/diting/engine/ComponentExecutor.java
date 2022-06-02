@@ -10,7 +10,8 @@ import cn.zaolunzi.diting.api.Component;
  */
 public abstract class ComponentExecutor {
   protected Component component;
-  protected InstanceExecutor[] instanceExecutors;
+  protected InstanceExecutor [] instanceExecutors;
+  protected NamedEventQueue [] incomingQueues;
   
   public ComponentExecutor(Component component) {
     this.component = component;
@@ -19,18 +20,17 @@ public abstract class ComponentExecutor {
   }
   
   /**
-   * 启动该组件的实例执行器（真实进程）
+   * Start instance executors (real processes) of this component.
    */
   public abstract void start();
   
   /**
-   * 获取该组件执行器的实例执行器。
-   * @return
+   * Get the instance executors of this component executor.
    */
-  public InstanceExecutor[] getInstanceExecutors() {
+  public InstanceExecutor [] getInstanceExecutors() {
     return instanceExecutors;
   }
-
+  
   public Component getComponent() {
     return component;
   }
@@ -41,11 +41,17 @@ public abstract class ComponentExecutor {
     }
   }
   
-  public void setIncomingQueues(EventQueue [] queues) {
+  public void setIncomingQueues(NamedEventQueue [] queues) {
+    incomingQueues = queues;
     for (int i = 0; i < queues.length; ++i) {
       instanceExecutors[i].setIncomingQueue(queues[i]);
     }
   }
+  
+  public NamedEventQueue[] getIncomingQueues() {
+    return incomingQueues;
+  }
+  
   
   public void addOutgoingQueue(String channel, EventQueue queue) {
     for (InstanceExecutor instance: instanceExecutors) {

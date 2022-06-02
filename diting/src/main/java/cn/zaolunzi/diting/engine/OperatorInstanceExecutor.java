@@ -2,7 +2,11 @@ package cn.zaolunzi.diting.engine;
 
 
 import cn.zaolunzi.diting.api.Event;
+import cn.zaolunzi.diting.api.NameEventPair;
 import cn.zaolunzi.diting.api.Operator;
+import cn.zaolunzi.diting.api.WindowingOperator;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * 操作员组件的执行者。当执行器启动时，会创建一个新线程来重复调用算子组件的apply()函数。
@@ -18,24 +22,33 @@ public class OperatorInstanceExecutor extends InstanceExecutor {
     }
     
     /**
-     * 运行一次进程。
-     *
-     * @return 如果线程应该继续，则为 true； 如果线程应该存在，则为 false.
+     * Run process once.
+     * @return true if the thread should continue; false if the thread should exist.
      */
     @Override
     protected boolean runOnce() {
-        Event event;
+        NameEventPair pair;
         try {
-            // 读取输入
-            event = incomingQueue.take();
+            // Read input. Time out every one second to check if there is any event windows ready to be processed.
+            pair = incomingQueue.poll(1, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             return false;
         }
         
-        // 应用操作器
-        operator.apply(event, eventCollector);
+        // Apply operator
+        if (operator instanceof WindowingOperator) {
+            // WindowingOperator handles null events too.
+            if (pair == null) {
+                operator.apply(null, null, eventCollector);
+            } else {
+                operator.apply(pair.getStreamName(), pair.getEvent(), eventCollector);
+            }
+        } else if (pair != null) {
+            // For regular operators.
+            operator.apply(pair.getStreamName(), pair.getEvent(), eventCollector);
+        }
         
-        // 发射出去
+        // Emit out
         try {
             for (String channel: eventCollector.getRegisteredChannels()) {
                 for (Event output: eventCollector.getEventList(channel)) {

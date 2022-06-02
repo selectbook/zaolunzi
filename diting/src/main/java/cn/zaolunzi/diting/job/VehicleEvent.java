@@ -8,16 +8,22 @@ import cn.zaolunzi.diting.api.Event;
  * @Date: 2022/5/30 00:36
  */
 public class VehicleEvent implements Event {
-  // 获取事件中存储的车辆数据
-  private final String type;
-
-  // vehicle以字符串形式存储的构造函数
-  public VehicleEvent(String type) {
-    this.type = type;
+  public final String make;
+  public final String model;
+  public final int year;
+  public final int zone;
+  public final long time;
+  
+  public VehicleEvent(String make, String model, int year, int zone, long time) {
+    this.make = make;
+    this.model = model;
+    this.year = year;
+    this.zone = zone;
+    this.time = time;
   }
-
-  // 车辆的内部字符串
-  public String getType() {
-    return type;
+  
+  @Override
+  public String toString() {
+    return String.format("[make:%s; model:%s, year:%d, zone:%d, time:%d]", make, model, year, zone, time);
   }
 }

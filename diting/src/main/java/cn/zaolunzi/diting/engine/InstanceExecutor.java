@@ -17,7 +17,7 @@ public abstract class InstanceExecutor extends Process {
   // 此列表用于接受来自用户逻辑的事件。
   protected final EventCollector eventCollector = new EventCollector();
   // 上游进程的数据队列
-  protected EventQueue incomingQueue = null;
+  protected NamedEventQueue incomingQueue = null;
   // 下游进程的数据队列
   protected Map<String, List<EventQueue>> outgoingQueueMap = new HashMap<String, List<EventQueue>>();
   
@@ -27,7 +27,7 @@ public abstract class InstanceExecutor extends Process {
     eventCollector.registerChannel(channel);
   }
   
-  public void setIncomingQueue(EventQueue queue) {
+  public void setIncomingQueue(NamedEventQueue queue) {
     incomingQueue = queue;
   }
   

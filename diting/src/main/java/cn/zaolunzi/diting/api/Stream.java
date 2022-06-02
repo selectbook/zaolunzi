@@ -1,9 +1,7 @@
 package cn.zaolunzi.diting.api;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,40 +14,49 @@ import java.util.Set;
  *      .applyOperator(myOperator);
  */
 public class Stream implements Serializable {
-  private static final long serialVersionUID = 1066535753363064940L;
+  private static final long serialVersionUID = -4375024141519119762L;
   private static final String DEFAULT_CHANNEL = "default";
+  private static final String DEFAULT_STREAM = "default";
+  
   // List of all operators to be applied to channels in this stream.
-  private final Map<String, Set<Operator>> operatorMap = new HashMap<String, Set<Operator>>();
+  private final Map<String, Map<Operator, String>> operatorMap =
+          new HashMap<String, Map<Operator, String>>();
   
   public Stream applyOperator(Operator operator) {
-    return applyOperator(DEFAULT_CHANNEL, operator);
+    return applyOperator(DEFAULT_CHANNEL, operator, DEFAULT_STREAM);
   }
-
+  
+  Stream applyOperator(Operator operator, String streamName) {
+    return applyOperator(DEFAULT_CHANNEL, operator, streamName);
+  }
+  
   /**
-   * 将操作器应用于此流
-   * @param operator 要连接到当前流的操作器
-   * @return 该操作器的传出流。
+   * Apply an operator to this stream.
+   * @param channel The channel to hook up the operator.
+   * @param operator The operator to be connected to the current stream.
+   * @param streamName The stream name the
+   * @return The outgoing stream of the operator.
    */
-  protected Stream applyOperator(String channel, Operator operator) {
+  protected Stream applyOperator(String channel, Operator operator, String streamName) {
     if (operatorMap.containsKey(channel)) {
-      Set<Operator> operatorSet = operatorMap.get(channel);
-      if (operatorSet.contains(operator)) {
+      Map<Operator, String> operatorToName = operatorMap.get(channel);
+      if (operatorToName.containsKey(operator)) {
         throw new RuntimeException("Operator " + operator.getName() + " is added to job twice");
       }
-      operatorSet.add(operator);
+      operatorToName.put(operator, streamName);
     } else {
       // This is a new channel.
-      Set<Operator> operatorSet = new HashSet<Operator>();
-      operatorSet.add(operator);
-      operatorMap.put(channel, operatorSet);
+      Map<Operator, String> operatorToName = new HashMap<Operator, String>();
+      operatorToName.put(operator, streamName);
+      operatorMap.put(channel, operatorToName);
     }
-  
+    
     return operator.getOutgoingStream();
   }
   
-  protected Stream applyWindowOperator(WindowingStrategy strategy, WindowOperator operator) {
+  protected Stream applyWindowOperator(Map<String, WindowingStrategy> windowingMap, WindowOperator operator) {
     WindowingOperator windowingOperator = new WindowingOperator(
-            operator.getName(), operator.getParallelism(), strategy, operator, operator.getGroupingStrategy());
+            operator.getName(), operator.getParallelism(), windowingMap, operator, operator.getGroupingStrategyMap());
     applyOperator(windowingOperator);
     return operator.getOutgoingStream();
   }
@@ -58,9 +65,14 @@ public class Stream implements Serializable {
     return new StreamChannel(this, channel);
   }
   
-  public WindowedStream withWindowing(WindowingStrategy strategy) {
-    return new WindowedStream(this, strategy);
+  public WindowedStream withWindowing(WindowingStrategy windowingStrategy) {
+    return withWindowing(Map.of("default", windowingStrategy));
   }
+  
+  public WindowedStream withWindowing(Map<String, WindowingStrategy> windowingMap) {
+    return new WindowedStream(this, windowingMap);
+  }
+  
   /**
    * Get the channels in the stream. Note that the channel set
    * is collected from the downstream component's applyOperator() calls.
@@ -72,9 +84,9 @@ public class Stream implements Serializable {
   
   /**
    * Get the collection of operators applied to this stream.
-   * @return The collection of operators applied to this stream
+   * @return The collection of operators applied to this stream.
    */
-  public Collection<Operator> getAppliedOperators(String channel) {
+  public Map<Operator, String> getAppliedOperators(String channel) {
     return operatorMap.get(channel);
   }
 }

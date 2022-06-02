@@ -16,6 +16,11 @@ public class StreamChannel extends Stream{
     
     @Override
     public Stream applyOperator(Operator operator) {
-        return baseStream.applyOperator(channel, operator);
+        return baseStream.applyOperator(channel, operator, null);
+    }
+    
+    @Override
+    public Stream applyOperator(Operator operator, String streamName) {
+        return baseStream.applyOperator(channel, operator, streamName);
     }
 }

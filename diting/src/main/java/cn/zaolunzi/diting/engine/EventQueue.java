@@ -10,9 +10,11 @@ import java.util.concurrent.ArrayBlockingQueue;
  * @Date: 2022/5/29 11:36
  */
 public class EventQueue extends ArrayBlockingQueue<Event> {
-  private static final long serialVersionUID = 3673430816396878407L;
-
-  public EventQueue(int size) {
-      super(size);
-  }
+    private static final long serialVersionUID = 5299563454777716488L;
+    public final String streamName;
+    
+    public EventQueue(int size, String streamName) {
+        super(size);
+        this.streamName = streamName;
+    }
 }

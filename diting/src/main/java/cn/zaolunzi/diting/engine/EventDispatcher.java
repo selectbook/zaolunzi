@@ -2,6 +2,7 @@ package cn.zaolunzi.diting.engine;
 
 import cn.zaolunzi.diting.api.Event;
 import cn.zaolunzi.diting.api.GroupingStrategy;
+import cn.zaolunzi.diting.api.NameEventPair;
 
 /**
  * 将数据路由到并行化组件的不同实例
@@ -12,7 +13,7 @@ import cn.zaolunzi.diting.api.GroupingStrategy;
 public class EventDispatcher extends Process {
     private final OperatorExecutor downstreamExecutor;
     private EventQueue incomingQueue = null;
-    private EventQueue [] outgoingQueues = null;
+    private NamedEventQueue [] outgoingQueues = null;
     
     public EventDispatcher(OperatorExecutor downstreamExecutor) {
         this.downstreamExecutor = downstreamExecutor;
@@ -23,9 +24,15 @@ public class EventDispatcher extends Process {
         try {
             Event event = incomingQueue.take();
             
-            GroupingStrategy grouping = downstreamExecutor.getGroupingStrategy();
+            final GroupingStrategy grouping = downstreamExecutor.getGroupingStrategy(incomingQueue.streamName);
             int instance = grouping.getInstance(event, outgoingQueues.length);
-            outgoingQueues[instance].put(event);
+            if (instance == GroupingStrategy.ALL_INSTANCES) {
+                for (NamedEventQueue queue: outgoingQueues) {
+                    queue.put(new NameEventPair(incomingQueue.streamName, event));
+                }
+            } else {
+                outgoingQueues[instance].put(new NameEventPair(incomingQueue.streamName, event));
+            }
         } catch (InterruptedException e) {
             return false;
         }
@@ -36,7 +43,7 @@ public class EventDispatcher extends Process {
         incomingQueue = queue;
     }
     
-    public void setOutgoingQueues(EventQueue [] queues) {
+    public void setOutgoingQueues(NamedEventQueue [] queues) {
         outgoingQueues = queues;
     }
 }

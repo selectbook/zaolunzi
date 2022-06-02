@@ -13,9 +13,11 @@ import org.apache.commons.lang3.SerializationUtils;
  */
 public class OperatorExecutor extends ComponentExecutor {
     private Operator operator;
-    
     public OperatorExecutor(Operator operator) {
-        super(operator); this.operator = operator; for (int i = 0; i < operator.getParallelism(); ++i) {
+        super(operator);
+        
+        this.operator = operator;
+        for (int i = 0; i < operator.getParallelism(); ++i) {
             Operator cloned = SerializationUtils.clone(operator);
             instanceExecutors[i] = new OperatorInstanceExecutor(i, cloned);
         }
@@ -30,7 +32,7 @@ public class OperatorExecutor extends ComponentExecutor {
         }
     }
     
-    public GroupingStrategy getGroupingStrategy() {
-        return operator.getGroupingStrategy();
+    public GroupingStrategy getGroupingStrategy(String streamName) {
+        return operator.getGroupingStrategy(streamName);
     }
 }

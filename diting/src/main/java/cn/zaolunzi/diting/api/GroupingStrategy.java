@@ -6,6 +6,7 @@ package cn.zaolunzi.diting.api;
  * @Date: 2022/5/30 00:36
  */
 public interface GroupingStrategy {
+  public final int ALL_INSTANCES = -1; // A special value for ALL instances.
   /**
    * 从事件和组件并行中获取目标实例 ID。
    * 请注意，在此实现中，仅选择了一个实例。

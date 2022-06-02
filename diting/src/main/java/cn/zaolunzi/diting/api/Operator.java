@@ -1,25 +1,26 @@
 package cn.zaolunzi.diting.api;
 
-import java.io.Serializable;
+import java.util.Map;
 
 /**
  * 所有用户自定义操作器（Operator） 的基础类.
  */
-public abstract class Operator extends Component implements Serializable {
-  private static final long serialVersionUID = -1972993710318354151L;
+public abstract class Operator extends Component {
+  private final Map<String, GroupingStrategy> groupingMap;
   
   // 传入数据的分组策略
-  private final GroupingStrategy grouping;
   
   public Operator(String name, int parallelism) {
-    super(name, parallelism);
-    // 默认的分组策略
-    this.grouping = new ShuffleGrouping();
+    this(name, parallelism, new ShuffleGrouping());
   }
   
   public Operator(String name, int parallelism, GroupingStrategy grouping) {
+    this(name, parallelism, Map.of("default", grouping));
+  }
+  
+  public Operator(String name, int parallelism, Map<String, GroupingStrategy> groupingMap) {
     super(name, parallelism);
-    this.grouping = grouping;
+    this.groupingMap = groupingMap;
   }
   
   /**
@@ -34,13 +35,21 @@ public abstract class Operator extends Component implements Serializable {
    * @param event 传入事件
    * @param eventCollector 传出事件收集器
    */
-  public abstract void apply(Event event, EventCollector eventCollector);
+  public abstract void apply(String streamName, Event event, EventCollector eventCollector);
   
   /**
-   * 获取事件的分组键。
+   * Get the grouping strategy for a specific stream.
    * @return The grouping strategy of this operator
    */
-  public GroupingStrategy getGroupingStrategy() {
-    return grouping;
+  public GroupingStrategy getGroupingStrategy(String streamName) {
+    return groupingMap.get(streamName);
+  }
+  
+  /**
+   * Get the grouping strategy map. This function is used by WindowingOperator only.
+   * @return The grouping strategy of this operator
+   */
+  Map<String, GroupingStrategy> getGroupingStrategyMap() {
+    return groupingMap;
   }
 }
