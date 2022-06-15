@@ -21,7 +21,9 @@ Reinventing the wheel (造轮子)
 
 #### Build your own `Front-end Framework / Library`
 
-#### Build your own `Game`
+#### Build your own `Programming Language`
+
+* [**Java**: _DiJiang(帝江): tiny Interpreter_](https://github.com/selectbook/zaolunzi/tree/main/dijiang)
 
 #### Build your own `Network Stack`
 
