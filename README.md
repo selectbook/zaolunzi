@@ -33,3 +33,7 @@ Reinventing the wheel (造轮子)
 
 #### Build your own `Web Server`
 
+#### Build your own `other middleware`
+
+* [**Java**: _Zhangyu(章鱼): tiny Interpreter_](https://github.com/selectbook/zaolunzi/tree/main/zhangyu)
+
