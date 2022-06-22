@@ -38,7 +38,32 @@ public class ProduceCustomer {
             }
         });
         
+        Thread consumer = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // 获取独占锁
+                lock.lock();
+                try {
+                    // 队列为空，则等待
+                    while (0 == queue.size()) {
+                        notFull.await();
+                    }
+                    // 消费一个元素
+                    String ele = queue.poll();
+                    // 唤醒生产者线程
+                    notEmpty.signalAll();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    // 释放锁
+                    lock.unlock();
+                }
         
+            }
+        });
+        // 启动线程
+        producer.start();
+        consumer.start();
     }
     
 }
