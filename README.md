@@ -31,6 +31,8 @@ Reinventing the wheel (造轮子)
 
 * [**Java**: _Xuanwu(玄武): big data unified search engine_](https://github.com/selectbook/zaolunzi/tree/main/xuanwu)
 
+* [**Java**: _Xianmao(仙猫): saas e-commerce system_](https://github.com/selectbook/zaolunzi/tree/main/xianmao)
+
 #### Build your own `Front-end Framework / Library`
 
 * [**Java**: _Jiuweihu(九尾狐): MVVM JavaScript Framework_]()
