@@ -33,6 +33,10 @@ Reinventing the wheel (造轮子)
 
 * [**Java**: _Xianmao(仙猫): saas e-commerce system_](https://github.com/selectbook/zaolunzi/tree/main/xianmao)
 
+* [**Java**: _Baize(白泽): distributed message queue_](https://github.com/selectbook/zaolunzi/tree/main/baize)
+
+* [**Java**: _Chaofen(炒粉): opensource community_](https://github.com/selectbook/zaolunzi/tree/main/chaofen)
+
 #### Build your own `Front-end Framework / Library`
 
 * [**Java**: _Jiuweihu(九尾狐): MVVM JavaScript Framework_]()
