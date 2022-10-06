@@ -1,0 +1,6 @@
+/target
+*.db
+.idea
+/tpch-dbgen
+/.vscode
+.gdb_history
