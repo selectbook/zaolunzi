@@ -55,7 +55,9 @@ Reinventing the wheel (造轮子)
 
 #### Build your own `DataBase`
 
-* [**JavaScript**: _Bifang(毕方): distributed database_](https://github.com/selectbook/zaolunzi/tree/main/bifang)
+* [**Java**: _Bifang(毕方): distributed database_](https://github.com/selectbook/zaolunzi/tree/main/bifang)
+
+* [**rust**: _Jinwu(金乌): olap database_](https://github.com/selectbook/zaolunzi/tree/main/jinwu)
 
 #### Build your own `other middleware`
 
