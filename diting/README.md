@@ -130,3 +130,7 @@ at org.apache.commons.lang3.SerializationUtils.clone(SerializationUtils.java:92)
 这个错误是由于基类没有被序列化
 序列化任何子类后，读取数据时它的基类构造函数被触发。
 将Serializable的实现添加到父类
+
+大数据生态逐渐变得臃肿
+
+从数据集成、批/流处理、到数据调度，数据从业者都在努力封装复杂度，提供易于操作的方式，简单来说就是配置化、图形化、SQL。
