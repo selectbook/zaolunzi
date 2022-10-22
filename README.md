@@ -15,6 +15,8 @@ Reinventing the wheel (造轮子)
 
 * [**Java**: _XuanWu(玄武): big data unified search engine_](https://github.com/selectbook/zaolunzi/tree/main/xuanwu)
 
+* [**Java**: _Huoshu(火鼠): distributed file system_](https://github.com/selectbook/zaolunzi/tree/main/huoshu)
+
 #### Build your own `Back-end Framework / Library`
 
 * [**Java**: _Maque(麻雀): tiny java web framework_](https://github.com/selectbook/zaolunzi/tree/main/maque)
